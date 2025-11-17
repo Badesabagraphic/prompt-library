@@ -64,9 +64,15 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-6">
                 <h1 class="text-3xl font-bold text-gray-800">🚀 کتابخانه پرامپت شرکت</h1>
-                <button id="addPromptButton" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300">
-                    + افزودن پرامپت جدید
-                </button>
+                <!-- دکمه‌های هدر -->
+                <div class="flex space-x-2 space-x-reverse">
+                    <button id="exportCsvButton" class="bg-green-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-700 transition duration-300">
+                        خروجی CSV
+                    </button>
+                    <button id="addPromptButton" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300">
+                        + افزودن پرامپت جدید
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -209,6 +215,7 @@
 
         // --- 2. مدیریت UI (عناصر DOM) ---
         const addPromptButton = document.getElementById('addPromptButton');
+        const exportCsvButton = document.getElementById('exportCsvButton'); // <--- دکمه جدید
         const modal = document.getElementById('addModal');
         const closeModalButton = document.getElementById('closeModalButton');
         const cancelButton = document.getElementById('cancelButton');
@@ -230,6 +237,64 @@
                 setTimeout(() => { btn.textContent = '📋'; }, 1500);
             }
         }
+
+        // --- تابع کمکی برای خروجی CSV ---
+        function exportToCSV() {
+            if (allPrompts.length === 0) {
+                alert('هیچ داده‌ای برای خروجی گرفتن وجود ندارد.');
+                return;
+            }
+
+            const headers = [
+                "متن پرامپت", 
+                "موضوع / مناسبت", 
+                "کلمات کلیدی", 
+                "پرامپت منفی", 
+                "نمونه بصری", 
+                "یادداشت‌ها"
+            ];
+            
+            // تابع کمکی برای Escape کردن داده‌های CSV
+            const escapeCSV = (str) => {
+                if (!str) return '""';
+                let result = str.replace(/"/g, '""'); // Escape double quotes
+                if (result.search(/("|,|\n)/g) >= 0) {
+                    result = `"${result}"`; // Wrap in double quotes if it contains comma, newline, or double quotes
+                }
+                return result;
+            };
+
+            let csvContent = headers.join(',') + '\n';
+            
+            allPrompts.forEach(prompt => {
+                const data = prompt.data;
+                const row = [
+                    escapeCSV(data.text),
+                    escapeCSV(data.occasion),
+                    escapeCSV(data.keywords),
+                    escapeCSV(data.negative),
+                    escapeCSV(data.link),
+                    escapeCSV(data.notes)
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            // ایجاد و دانلود فایل
+            // \uFEFF BOM for UTF-8 to make Excel happy with Persian characters
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            const timestamp = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+            link.setAttribute('download', `prompt_library_${timestamp}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        exportCsvButton.addEventListener('click', exportToCSV); // <--- اتصال تابع به دکمه
 
         // تابع باز کردن مودال
         const showModal = () => modal.classList.remove('hidden');
@@ -419,8 +484,9 @@
                     const docs = querySnapshot.docs
                         .map(doc => ({ id: doc.id, data: doc.data() })) // ذخیره داده‌ها در حافظه محلی
                         .sort((a, b) => {
-                            const timeA = a.data.createdAt?.toMillis() || 0;
-                            const timeB = b.data.createdAt?.toMillis() || 0;
+                            // مرتب سازی بر اساس updatedAt (اگر وجود دارد) یا createdAt
+                            const timeA = a.data.updatedAt?.toMillis() || a.data.createdAt?.toMillis() || 0;
+                            const timeB = b.data.updatedAt?.toMillis() || b.data.createdAt?.toMillis() || 0;
                             return timeB - timeA; // جدیدترین اول
                         });
                     
@@ -440,8 +506,7 @@
                     tableBody.innerHTML = `<tr id="errorRow"><td colspan="7" class="px-6 py-10 text-center text-red-500 text-lg border border-gray-300">خطا در بارگذاری داده‌ها. لطفاً صفحه را رفرش کنید.</td></tr>`;
                 });
 
-            // } catch (error) { // <--- این بلوک 'catch' اضافی و خالی حذف می‌شود
-            } catch (error) { // <--- این 'catch' باقی می‌ماند
+            } catch (error) {
                 console.error("Error during auth or initialization: ", error);
                 tableBody.innerHTML = `<tr id="authErrorRow"><td colspan="7" class="px-6 py-10 text-center text-red-500 text-lg border border-gray-300">خطا در احراز هویت. ${error.message}</td></tr>`;
             }
