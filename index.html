@@ -13,46 +13,33 @@
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 1.25rem; /* 20px */
+            font-size: 1.2rem; 
             line-height: 1;
             padding: 0.25rem;
-            margin: 0 0.125rem; /* کمی فاصله بین دکمه‌ها */
+            margin: 0 0.25rem;
         }
-        .delete-btn {
-            color: #ef4444; /* red-500 */
-        }
-        .delete-btn:hover {
-            color: #b91c1c; /* red-700 */
-        }
-        .edit-btn {
-            color: #3b82f6; /* blue-500 */
-        }
-        .edit-btn:hover {
-            color: #1d4ed8; /* blue-700 */
-        }
+        .delete-btn { color: #ef4444; }
+        .delete-btn:hover { color: #b91c1c; }
+        .edit-btn { color: #3b82f6; }
+        .edit-btn:hover { color: #1d4ed8; }
+        
         /* استایل برای دکمه کپی */
         .copy-btn {
             position: absolute;
-            top: 0.5rem; /* 8px */
-            left: 0.5rem; /* 8px */
-            padding: 0.25rem; /* 4px */
+            top: 0.25rem;
+            left: 0.25rem;
+            padding: 0.1rem 0.3rem;
             background-color: white;
-            border: 1px solid #e2e8f0; /* gray-200 */
-            border-radius: 0.25rem; /* 4px */
-            color: #6b7280; /* gray-500 */
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+            color: #6b7280;
             cursor: pointer;
-            opacity: 0; /* مخفی بودن به صورت پیش‌فرض */
+            opacity: 0;
             transition: opacity 0.2s;
-            font-size: 0.8rem; /* کوچک‌تر کردن آیکون/متن */
+            font-size: 0.75rem;
         }
-        /* نمایش دکمه کپی هنگام هاور روی ردیف */
-        tr:hover .copy-btn {
-            opacity: 1;
-        }
-        .copy-btn:hover {
-            color: #3b82f6; /* blue-500 */
-            background-color: #f9fafb; /* gray-50 */
-        }
+        tr:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { color: #3b82f6; background-color: #f9fafb; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -62,18 +49,18 @@
             <div class="flex justify-between items-center py-6">
                 <h1 class="text-3xl font-bold text-gray-800">🚀 کتابخانه پرامپت بادصبا</h1>
                 <div class="flex space-x-2 space-x-reverse">
-                    <button id="exportCsvButton" class="bg-green-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-700 transition duration-300">
+                    <button id="exportCsvButton" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition duration-300 text-sm">
                         خروجی CSV
                     </button>
-                    <button id="addPromptButton" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300">
-                        + افزودن پرامپت جدید
+                    <button id="addPromptButton" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300 text-sm">
+                        + پرامپت جدید
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+    <main class="container mx-auto p-4">
         
         <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
             <input type="text" id="searchInput" placeholder=" جستجو در پرامپت‌ها (بر اساس متن، تیم و...)..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -81,22 +68,21 @@
 
         <div class="overflow-x-auto bg-white rounded-lg shadow">
             <table class="w-full text-sm text-right text-gray-700 border-collapse border border-gray-300 table-fixed">
-                <thead class="bg-gray-800 text-white text-base">
+                <thead class="bg-gray-800 text-white">
                     <tr>
-                        <th class="px-6 py-4 border border-gray-300 w-1/4">💡 متن پرامپت</th>
-                        <th class="px-6 py-4 border border-gray-300 w-24">👥 تیم</th> 
-                        <th class="px-6 py-4 border border-gray-300">🏷️ موضوع / مناسبت</th>
-                        <th class="px-6 py-4 border border-gray-300">🔑 کلمات کلیدی</th>
-                        <th class="px-6 py-4 border border-gray-300">⛔ پرامپت منفی</th>
-                        <th class="px-6 py-4 border border-gray-300">🖼️ نمونه بصری</th>
-                        <th class="px-6 py-4 border border-gray-300">✍️ یادداشت‌ها</th>
-                        <th class="px-6 py-4 border border-gray-300 w-24">اقدامات</th>
-                    </tr>
+                        <th class="px-4 py-3 border border-gray-300 w-3/12">💡 متن پرامپت</th>
+                        <th class="px-4 py-3 border border-gray-300 w-24">👥 تیم</th> 
+                        <th class="px-4 py-3 border border-gray-300 w-2/12">🏷️ موضوع</th>
+                        <th class="px-4 py-3 border border-gray-300 w-2/12">🔑 کلمات</th>
+                        <th class="px-4 py-3 border border-gray-300 w-1/12">⛔ منفی</th>
+                        <th class="px-4 py-3 border border-gray-300 w-20">🖼️ لینک</th>
+                        <th class="px-4 py-3 border border-gray-300 w-1/12">✍️ نوت</th>
+                        <th class="px-4 py-3 border border-gray-300 w-32">اقدامات</th> </tr>
                 </thead>
                 <tbody id="promptTableBody">
                     <tr id="loadingRow">
                         <td colspan="8" class="px-6 py-10 text-center text-gray-500 text-lg border border-gray-300">
-                             در حال بارگذاری داده‌ها از فایربیس...
+                             در حال بارگذاری...
                         </td>
                     </tr>
                 </tbody>
@@ -133,7 +119,7 @@
                         </select>
                     </div>
                     <div>
-                        <label for="promptOccasion" class="block text-sm font-medium text-gray-700 mb-1">🏷️ موضوع / مناسبت</label>
+                        <label for="promptOccasion" class="block text-sm font-medium text-gray-700 mb-1">🏷️ موضوع</label>
                         <input type="text" id="promptOccasion" name="promptOccasion" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
@@ -174,11 +160,9 @@
             deleteDoc, 
             updateDoc, 
             collection, 
-            onSnapshot,
-            setLogLevel
+            onSnapshot
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- 1. تنظیمات اولیه فایربیس ---
           const firebaseConfig = {
             apiKey: "AIzaSyCw3CvUnumkNgK2-uhZ1paUPetfBc-hOYs",
             authDomain: "my-prompt-library-35534.firebaseapp.com",
@@ -192,8 +176,6 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         
-        setLogLevel('Debug');
-
         const promptsCollectionPath = "prompts";
         const promptsCollection = collection(db, promptsCollectionPath);
 
@@ -201,7 +183,6 @@
         let currentEditId = null;
         let allPrompts = [];
 
-        // --- 2. مدیریت UI (عناصر DOM) ---
         const addPromptButton = document.getElementById('addPromptButton');
         const exportCsvButton = document.getElementById('exportCsvButton');
         const modal = document.getElementById('addModal');
@@ -213,35 +194,23 @@
         const modalTitle = document.getElementById('modalTitle');
         const saveButton = document.getElementById('saveButton');
 
-        // --- تابع کمکی برای کپی متن ---
         async function copyToClipboard(text, btn) {
             try {
                 await navigator.clipboard.writeText(text);
-                btn.textContent = 'کپی شد!';
+                btn.textContent = 'OK!';
                 setTimeout(() => { btn.textContent = '📋'; }, 1500);
             } catch (err) {
-                console.error('Failed to copy: ', err);
-                btn.textContent = 'خطا!';
-                setTimeout(() => { btn.textContent = '📋'; }, 1500);
+                console.error('Failed', err);
             }
         }
 
-        // --- تابع کمکی برای خروجی CSV ---
         function exportToCSV() {
             if (allPrompts.length === 0) {
-                alert('هیچ داده‌ای برای خروجی گرفتن وجود ندارد.');
+                alert('داده‌ای وجود ندارد.');
                 return;
             }
 
-            const headers = [
-                "متن پرامپت", 
-                "تیم", // <-- اضافه شدن به CSV
-                "موضوع / مناسبت", 
-                "کلمات کلیدی", 
-                "پرامپت منفی", 
-                "نمونه بصری", 
-                "یادداشت‌ها"
-            ];
+            const headers = ["متن", "تیم", "موضوع", "کلمات", "منفی", "لینک", "نوت"];
             
             const escapeCSV = (str) => {
                 if (!str) return '""';
@@ -258,7 +227,7 @@
                 const data = prompt.data;
                 const row = [
                     escapeCSV(data.text),
-                    escapeCSV(data.team), // <-- اضافه شدن داده تیم
+                    escapeCSV(data.team),
                     escapeCSV(data.occasion),
                     escapeCSV(data.keywords),
                     escapeCSV(data.negative),
@@ -270,22 +239,15 @@
 
             const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            
-            link.setAttribute('href', url);
-            const timestamp = new Date().toISOString().slice(0, 10);
-            link.setAttribute('download', `prompt_library_${timestamp}.csv`);
-            link.style.visibility = 'hidden';
-            
+            link.setAttribute('href', URL.createObjectURL(blob));
+            link.setAttribute('download', `prompts_${new Date().toISOString().slice(0, 10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
         exportCsvButton.addEventListener('click', exportToCSV);
 
-        // توابع مودال
         const showModal = () => modal.classList.remove('hidden');
-        
         const hideModal = () => {
             modal.classList.add('hidden');
             addPromptForm.reset();
@@ -297,83 +259,67 @@
         addPromptButton.addEventListener('click', () => {
             hideModal();
             currentEditId = null;
-            modalTitle.textContent = "افزودن پرامپت جدید";
-            saveButton.textContent = "ذخیره";
-            // پیش‌فرض تیم را روی طراحی بگذاریم (اختیاری)
             document.getElementById('promptTeam').value = "طراحی";
             showModal();
         });
         closeModalButton.addEventListener('click', hideModal);
         cancelButton.addEventListener('click', hideModal);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) hideModal();
-        });
+        modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
 
-        // --- 3. تابع کمکی برای رندر کردن ردیف جدول ---
         function renderPromptRow(docSnapshot) {
             const data = docSnapshot.data();
             const row = tableBody.insertRow(-1);
             row.id = docSnapshot.id;
             row.className = 'hover:bg-gray-50 transition duration-150';
 
-            // تعیین رنگ بج برای تیم‌ها (اختیاری برای زیبایی بیشتر)
             let teamBadgeColor = "bg-gray-100 text-gray-800";
             if (data.team === "طراحی") teamBadgeColor = "bg-pink-100 text-pink-800";
             if (data.team === "مارکتینگ") teamBadgeColor = "bg-green-100 text-green-800";
             if (data.team === "پرده آبی") teamBadgeColor = "bg-blue-100 text-blue-800";
 
+            // استفاده از px-4 برای کاهش فاصله و break-words برای جلوگیری از بیرون‌زدگی متن
             row.innerHTML = `
-                <td class="px-6 py-4 whitespace-normal break-words border border-gray-300 relative">
+                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 relative text-xs sm:text-sm">
                     <span class="prompt-text">${escapeHTML(data.text)}</span>
-                    <button class="copy-btn" title="کپی کردن متن پرامپت">📋</button>
+                    <button class="copy-btn" title="کپی">📋</button>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                    <span class="${teamBadgeColor} px-2 py-1 rounded-full text-xs font-semibold">
+                <td class="px-4 py-3 whitespace-nowrap border border-gray-300 text-center">
+                    <span class="${teamBadgeColor} px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold block w-min mx-auto">
                         ${escapeHTML(data.team)}
                     </span>
                 </td>
-                <td class="px-6 py-4 whitespace-normal break-words border border-gray-300">${escapeHTML(data.occasion)}</td>
-                <td class="px-6 py-4 whitespace-normal break-words border border-gray-300">${escapeHTML(data.keywords)}</td>
-                <td class="px-6 py-4 whitespace-normal break-words border border-gray-300">${escapeHTML(data.negative)}</td>
-                <td class="px-6 py-4 border border-gray-300">${data.link ? `<a href="${escapeHTML(data.link)}" class="text-blue-600 hover:underline" target="_blank">[لینک نمونه]</a>` : ''}</td>
-                <td class="px-6 py-4 whitespace-normal break-words border border-gray-300">${escapeHTML(data.notes)}</td>
-                <td class="px-6 py-4 text-center whitespace-nowrap border border-gray-300">
-                    <button class="action-btn edit-btn" data-id="${docSnapshot.id}" title="ویرایش پرامپت">✏️</button>
-                    <button class="action-btn delete-btn" data-id="${docSnapshot.id}" title="حذف پرامپت">🗑️</button>
+                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 text-xs">${escapeHTML(data.occasion)}</td>
+                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 text-xs">${escapeHTML(data.keywords)}</td>
+                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 text-xs">${escapeHTML(data.negative)}</td>
+                <td class="px-4 py-3 border border-gray-300 text-center">${data.link ? `<a href="${escapeHTML(data.link)}" class="text-blue-600 hover:underline text-xs" target="_blank">🔗 لینک</a>` : ''}</td>
+                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 text-xs">${escapeHTML(data.notes)}</td>
+                <td class="px-4 py-3 text-center whitespace-nowrap border border-gray-300">
+                    <button class="action-btn edit-btn" data-id="${docSnapshot.id}" title="ویرایش">✏️</button>
+                    <button class="action-btn delete-btn" data-id="${docSnapshot.id}" title="حذف">🗑️</button>
                 </td>
             `;
 
             row.querySelector('.delete-btn').addEventListener('click', async (e) => {
                 const id = e.currentTarget.dataset.id;
-                if (confirm('آیا از حذف این پرامپت مطمئن هستید؟')) {
-                    try {
-                        await deleteDoc(doc(db, promptsCollectionPath, id));
-                    } catch (error) {
-                        console.error("Error deleting document: ", error);
-                    }
+                if (confirm('حذف شود؟')) {
+                    try { await deleteDoc(doc(db, promptsCollectionPath, id)); } catch (error) { console.error(error); }
                 }
             });
 
-            // --- ویرایش ---
             row.querySelector('.edit-btn').addEventListener('click', (e) => {
                 const id = e.currentTarget.dataset.id;
                 const promptToEdit = allPrompts.find(p => p.id === id);
-
                 if (promptToEdit) {
                     currentEditId = id;
                     modalTitle.textContent = "ویرایش پرامپت";
                     saveButton.textContent = "ذخیره تغییرات";
-
                     document.getElementById('promptText').value = promptToEdit.data.text || '';
                     document.getElementById('promptOccasion').value = promptToEdit.data.occasion || '';
                     document.getElementById('promptKeywords').value = promptToEdit.data.keywords || '';
                     document.getElementById('promptNegative').value = promptToEdit.data.negative || '';
                     document.getElementById('promptLink').value = promptToEdit.data.link || '';
                     document.getElementById('promptNotes').value = promptToEdit.data.notes || '';
-                    
-                    // پر کردن فیلد تیم در حالت ویرایش (پیش‌فرض طراحی اگر قبلا ست نشده باشد)
                     document.getElementById('promptTeam').value = promptToEdit.data.team || 'طراحی';
-
                     showModal();
                 }
             });
@@ -385,13 +331,11 @@
             });
         }
 
-        // --- 4. مدیریت فرم (افزودن و ویرایش داده) ---
         addPromptForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const formData = {
                 text: document.getElementById('promptText').value,
-                team: document.getElementById('promptTeam').value, // <-- دریافت مقدار تیم
+                team: document.getElementById('promptTeam').value,
                 occasion: document.getElementById('promptOccasion').value,
                 keywords: document.getElementById('promptKeywords').value,
                 negative: document.getElementById('promptNegative').value,
@@ -402,99 +346,55 @@
 
             try {
                 if (currentEditId) {
-                    const docRef = doc(db, promptsCollectionPath, currentEditId);
-                    await updateDoc(docRef, {
-                        ...formData,
-                        updatedAt: new Date()
-                    });
+                    await updateDoc(doc(db, promptsCollectionPath, currentEditId), { ...formData, updatedAt: new Date() });
                 } else {
-                    await addDoc(promptsCollection, {
-                        ...formData,
-                        createdAt: new Date()
-                    });
+                    await addDoc(promptsCollection, { ...formData, createdAt: new Date() });
                 }
-                
                 hideModal();
-                
             } catch (error) {
-                console.error("Error saving document: ", error);
+                console.error(error);
             }
         });
 
-        // --- 5. مدیریت جستجو (فیلتر) ---
         const filterTable = () => {
             const query = searchInput.value.toLowerCase();
             const rows = tableBody.getElementsByTagName('tr');
-
             for (const row of rows) {
-                if (row.id === 'loadingRow' || row.id === 'emptyRow' || row.id === 'errorRow' || row.id === 'authErrorRow') continue; 
-                
+                if (row.id === 'loadingRow' || row.id === 'emptyRow') continue; 
                 const rowText = row.textContent.toLowerCase();
-                if (rowText.includes(query)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+                row.style.display = rowText.includes(query) ? '' : 'none';
             }
         };
         searchInput.addEventListener('input', filterTable);
 
-        // --- 6. تابع کمکی (Escape) ---
         function escapeHTML(str) {
             if (!str) return '';
-            return str.replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-            });
+            return str.replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
         }
 
-        // --- 7. تابع اصلی ---
         async function main() {
             try {
                 await signInAnonymously(auth);
                 userId = auth.currentUser?.uid;
-                console.log("User authenticated with ID:", userId);
-
                 onSnapshot(promptsCollection, (querySnapshot) => {
                     tableBody.innerHTML = ''; 
-                    
                     if (querySnapshot.empty) {
-                        tableBody.innerHTML = `<tr id="emptyRow"><td colspan="8" class="px-6 py-10 text-center text-gray-500 text-lg border border-gray-300">هنوز هیچ پرامپتی اضافه نشده است. اولین نفر باشید!</td></tr>`;
+                        tableBody.innerHTML = `<tr id="emptyRow"><td colspan="8" class="px-6 py-10 text-center text-gray-500">داده‌ای نیست.</td></tr>`;
                         allPrompts = [];
                         return;
                     }
-
                     const docs = querySnapshot.docs
                         .map(doc => ({ id: doc.id, data: doc.data() }))
-                        .sort((a, b) => {
-                            const timeA = a.data.updatedAt?.toMillis() || a.data.createdAt?.toMillis() || 0;
-                            const timeB = b.data.updatedAt?.toMillis() || b.data.createdAt?.toMillis() || 0;
-                            return timeB - timeA;
-                        });
-                    
+                        .sort((a, b) => (b.data.updatedAt?.toMillis() || b.data.createdAt?.toMillis() || 0) - (a.data.updatedAt?.toMillis() || a.data.createdAt?.toMillis() || 0));
                     allPrompts = docs;
-
-                    docs.forEach(docSnapshot => {
-                        renderPromptRow({
-                            id: docSnapshot.id,
-                            data: () => docSnapshot.data
-                        });
-                    });
-                    
+                    docs.forEach(docSnapshot => renderPromptRow({ id: docSnapshot.id, data: () => docSnapshot.data }));
                     filterTable();
-                }, (error) => {
-                    console.error("Error listening to collection: ", error);
-                    tableBody.innerHTML = `<tr id="errorRow"><td colspan="8" class="px-6 py-10 text-center text-red-500 text-lg border border-gray-300">خطا در بارگذاری داده‌ها. لطفا صفحه را رفرش کنید.</td></tr>`;
                 });
-
             } catch (error) {
-                console.error("Error during auth or initialization: ", error);
-                tableBody.innerHTML = `<tr id="authErrorRow"><td colspan="8" class="px-6 py-10 text-center text-red-500 text-lg border border-gray-300">خطا در احراز هویت. ${error.message}</td></tr>`;
+                console.error(error);
             }
         }
-
         document.addEventListener('DOMContentLoaded', main);
-
     </script>
-
 </body>
 </html>
