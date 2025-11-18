@@ -57,21 +57,18 @@
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-    <!-- ... (کد HTML هدر و بدنه بدون تغییر باقی می‌ماند) ... -->
-    
-    <!-- هدر صفحه -->
-    <header class="bg-white shadow-md">
+        
+        <header class="bg-white shadow-md">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-6">
-                <!-- تگ H1 اصلاح شده: w-16 h-16 برای اندازه و mr-2 برای فاصله صحیح در RTL -->
-                <h1 class="text-3xl font-bold text-gray-800 flex items-center">
-                    <img src="https://badesaba.ir/assets/img/logo_blue.svg" alt="لوگو بادصبا" class="inline-block align-middle w-16 h-16 mr-2">کتابخانه پرامپت بادصبا
+                                <h1 class="text-3xl font-bold text-gray-800">
+                    <img src="https://badesaba.ir/assets/img/logo_blue.svg" alt="لوگو بادصبا" class="inline-block align-middle w-8 h-8 ml-2">
+                    کتابخانه پرامپت بادصبا
                 </h1>
-                <!-- دکمه‌های هدر -->
-                <div class="flex space-x-2 space-x-reverse">
+                                <div class="flex space-x-2 space-x-reverse">
                     <button id="exportCsvButton" class="bg-green-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-700 transition duration-300">
                         خروجی CSV
-                    </button>
+            _       </button>
                     <button id="addPromptButton" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300">
                         + افزودن پرامپت جدید
                     </button>
@@ -80,34 +77,26 @@
         </div>
     </header>
 
-    <!-- بخش اصلی محتوا -->
-    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
         
-        <!-- نوار ابزار (جستجو) -->
-        <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
+                <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
             <input type="text" id="searchInput" placeholder=" جستجو در پرامپت‌ها (بر اساس هر ستون)..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
-        <!-- بخش جدول پرامپت‌ها -->
-        <div class="overflow-x-auto bg-white rounded-lg shadow">
-            <!-- <--- تغییر در این خط: min-w-max حذف شد و table-fixed اضافه شد -->
-            <table class="w-full text-sm text-right text-gray-700 border-collapse border border-gray-300">
-                <!-- هدر جدول -->
-                <thead class="bg-gray-800 text-white text-base">
+                <div class="overflow-x-auto bg-white rounded-lg shadow">
+                        <table class="w-full text-sm text-right text-gray-700 border-collapse border border-gray-300">
+                                <thead class="bg-gray-800 text-white text-base">
                     <tr>
                         <th class="px-6 py-4 border border-gray-300">💡 متن پرامپت</th>
-                    .   <th class="px-6 py-4 border border-gray-300">🏷️ موضوع / مناسبت</th>
+                        <th class="px-6 py-4 border border-gray-300">🏷️ موضوع / مناسبت</th>
                         <th class="px-6 py-4 border border-gray-300">🔑 کلمات کلیدی</th>
                         <th class="px-6 py-4 border border-gray-300">⛔ پرامپت منفی</th>
-                        <!-- ستون متغیرها حذف شد -->
-                        <th class="px-6 py-4 border border-gray-300">🖼️ نمونه بصری</th>
+                                                <th class="px-6 py-4 border border-gray-300">🖼️ نمونه بصری</th>
                         <th class="px-6 py-4 border border-gray-300">✍️ یادداشت‌ها</th>
                         <th class="px-6 py-4 border border-gray-300">اقدامات</th>
                     </tr>
                 </thead>
-                <!-- بدنه جدول که پرامپت‌ها در آن قرار می‌گیرند -->
-                <!-- این بخش اکنون توسط فایربیس پر می‌شود -->
-                <tbody id="promptTableBody">
+                                                <tbody id="promptTableBody">
                     <tr id="loadingRow">
                         <td colspan="7" class="px-6 py-10 text-center text-gray-500 text-lg border border-gray-300">
                              در حال بارگذاری داده‌ها از فایربیس...
@@ -118,17 +107,15 @@
         </div>
     </main>
 
-    <!-- مودال (پاپ‌آپ) برای افزودن/ویرایش پرامپت -->
-    <div id="addModal" class="hidden fixed inset-0 bg-black bg-opacity-60 overflow-y-auto h-full w-full flex items-center justify-center z-50 p-4">
+        <div id="addModal" class="hidden fixed inset-0 bg-black bg-opacity-60 overflow-y-auto h-full w-full flex items-center justify-center z-50 p-4">
         <div class="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-3xl max-h-full overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3 mb-5">
                 <h2 id="modalTitle" class="text-2xl font-semibold">افزودن پرامپت جدید</h2>
                 <button id="closeModalButton" class="text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
-            </div>
+  _           </div>
             
             <form id="addPromptForm" class="space-y-4">
-                <!-- ... (کد HTML فرم مودال بدون تغییر باقی می‌ماند) ... -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="promptText" class="block text-sm font-medium text-gray-700 mb-1">💡 متن پرامپت <span class="text-red-500">*</span></label>
                         <textarea id="promptText" name="promptText" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
@@ -144,7 +131,7 @@
                         <input type="text" id="promptOccasion" name="promptOccasion" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
-                        <label for="promptKeywords" class="block text-sm font-medium text-gray-700 mb-1">🔑 کلمات کلیدی</label>
+          _             <label for="promptKeywords" class="block text-sm font-medium text-gray-700 mb-1">🔑 کلمات کلیدی</label>
                         <input type="text" id="promptKeywords" name="promptKeywords" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
@@ -152,8 +139,7 @@
                         <input type="text" id="promptNegative" name="promptNegative" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
-                <!-- بخش متغیرها حذف شد و لینک تمام‌صفحه شد -->
-                <div class="grid grid-cols-1 gap-4">
+                                <div class="grid grid-cols-1 gap-4">
                     <div>
                         <label for="promptLink" class="block text-sm font-medium text-gray-700 mb-1">🖼️ لینک نمونه بصری</label>
                         <input type="url" id="promptLink" name="promptLink" placeholder="https://example.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ltr text-left">
@@ -171,8 +157,7 @@
         </div>
     </div>
     
-    <!-- کتابخانه‌های فایربیس -->
-    <script type="module">
+        <script type="module">
         // Import a specific version for compatibility
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -261,7 +246,7 @@
             const escapeCSV = (str) => {
                 if (!str) return '""';
                 let result = str.replace(/"/g, '""'); // Escape double quotes
-C             if (result.search(/("|,|\n)/g) >= 0) {
+                if (result.search(/("|,|\n)/g) >= 0) {
                     result = `"${result}"`; // Wrap in double quotes if it contains comma, newline, or double quotes
                 }
                 return result;
@@ -278,7 +263,7 @@ C             if (result.search(/("|,|\n)/g) >= 0) {
                     escapeCSV(data.negative),
                     escapeCSV(data.link),
                     escapeCSV(data.notes)
-        _         ];
+                ];
                 csvContent += row.join(',') + '\n';
             });
 
@@ -311,7 +296,7 @@ C             if (result.search(/("|,|\n)/g) >= 0) {
             saveButton.textContent = "ذخیره";
         };
 
-    _   // ایونت لیسنرهای مودال
+        // ایونت لیسنرهای مودال
         addPromptButton.addEventListener('click', () => {
             // اطمینان از ریست بودن مودال برای حالت "افزودن"
             hideModal(); // اول ریست کن
@@ -384,7 +369,7 @@ C             if (result.search(/("|,|\n)/g) >= 0) {
                     document.getElementById('promptNegative').value = promptToEdit.data.negative || '';
                     // فیلد متغیرها حذف شد
                     document.getElementById('promptLink').value = promptToEdit.data.link || '';
-                    document.getElementById('promptNotes').value = promptToEdit.data.notes || '';
+              _         document.getElementById('promptNotes').value = promptToEdit.data.notes || '';
 
                     showModal();
                 }
@@ -430,7 +415,7 @@ C             if (result.search(/("|,|\n)/g) >= 0) {
                 }
                 
                 // ردیف به صورت خودکار توسط onSnapshot به‌روز می‌شود
-A             hideModal();
+                hideModal();
                 
             } catch (error) {
                 console.error("Error saving document: ", error);
@@ -443,14 +428,14 @@ A             hideModal();
             const rows = tableBody.getElementsByTagName('tr');
 
             for (const row of rows) {
-                if (row.id === 'loadingRow' || row.id === 'emptyRow') continue;s
+                if (row.id === 'loadingRow' || row.id === 'emptyRow') continue; 
                 
                 const rowText = row.textContent.toLowerCase();
                 if (rowText.includes(query)) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
-B             }
+                }
             }
         };
         searchInput.addEventListener('input', filterTable);
@@ -470,7 +455,7 @@ B             }
                 await signInAnonymously(auth);
                 
                 userId = auth.currentUser?.uid;
-C             console.log("User authenticated with ID:", userId);
+                console.log("User authenticated with ID:", userId);
 
                 // گوش دادن به تغییرات دیتابیس (Real-time)
                 onSnapshot(promptsCollection, (querySnapshot) => {
@@ -488,7 +473,7 @@ C             console.log("User authenticated with ID:", userId);
                         .map(doc => ({ id: doc.id, data: doc.data() })) // ذخیره داده‌ها در حافظه محلی
                         .sort((a, b) => {
                             // مرتب سازی بر اساس updatedAt (اگر وجود دارد) یا createdAt
-D                         const timeA = a.data.updatedAt?.toMillis() || a.data.createdAt?.toMillis() || 0;
+                            const timeA = a.data.updatedAt?.toMillis() || a.data.createdAt?.toMillis() || 0;
                             const timeB = b.data.updatedAt?.toMillis() || b.data.createdAt?.toMillis() || 0;
                             return timeB - timeA; // جدیدترین اول
                         });
@@ -498,21 +483,21 @@ D                         const timeA = a.data.updatedAt?.toMillis()
                     docs.forEach(docSnapshot => {
                         // بازسازی یک آبجکت شبیه به docSnapshot برای تابع رندر
                         renderPromptRow({
-                -----------------           id: docSnapshot.id,
-        -----------------               data: () => docSnapshot.data
+                            id: docSnapshot.id,
+                            data: () => docSnapshot.data
                         });
                     });
                     
                     filterTable();
-Z               }, (error) => {
+nbsp;               }, (error) => {
                     console.error("Error listening to collection: ", error);
                     tableBody.innerHTML = `<tr id="errorRow"><td colspan="7" class="px-6 py-10 text-center text-red-500 text-lg border border-gray-300">خطا در بارگذاری داده‌ها. لطفاً صفحه را رفرش کنید.</td></tr>`;
-E             });
+                });
 
             } catch (error) {
                 console.error("Error during auth or initialization: ", error);
                 tableBody.innerHTML = `<tr id="authErrorRow"><td colspan="7" class="px-6 py-10 text-center text-red-500 text-lg border border-gray-300">خطا در احراز هویت. ${error.message}</td></tr>`;
-F         }
+            }
         }
 
         // --- 8. اجرای برنامه ---
