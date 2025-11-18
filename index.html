@@ -8,7 +8,6 @@
     <style>
         body { font-family: Tahoma, sans-serif; }
         .hidden { display: none; }
-        /* استایل ساده برای دکمه‌های اقدام */
         .action-btn {
             background: none;
             border: none;
@@ -23,7 +22,6 @@
         .edit-btn { color: #3b82f6; }
         .edit-btn:hover { color: #1d4ed8; }
         
-        /* استایل برای دکمه کپی */
         .copy-btn {
             position: absolute;
             top: 0.25rem;
@@ -63,21 +61,22 @@
     <main class="container mx-auto p-4">
         
         <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
-            <input type="text" id="searchInput" placeholder=" جستجو در پرامپت‌ها (بر اساس متن، تیم و...)..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="searchInput" placeholder=" جستجو در پرامپت‌ها..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
         <div class="overflow-x-auto bg-white rounded-lg shadow">
             <table class="w-full text-sm text-right text-gray-700 border-collapse border border-gray-300 table-fixed">
                 <thead class="bg-gray-800 text-white">
                     <tr>
-                        <th class="px-4 py-3 border border-gray-300 w-3/12">💡 متن پرامپت</th>
-                        <th class="px-4 py-3 border border-gray-300 w-24">👥 تیم</th> 
-                        <th class="px-4 py-3 border border-gray-300 w-2/12">🏷️ موضوع</th>
-                        <th class="px-4 py-3 border border-gray-300 w-2/12">🔑 کلمات</th>
-                        <th class="px-4 py-3 border border-gray-300 w-1/12">⛔ منفی</th>
-                        <th class="px-4 py-3 border border-gray-300 w-20">🖼️ لینک</th>
-                        <th class="px-4 py-3 border border-gray-300 w-1/12">✍️ نوت</th>
-                        <th class="px-4 py-3 border border-gray-300 w-32">اقدامات</th> </tr>
+                        <th class="px-4 py-3 border border-gray-300 w-[40%]">💡 متن پرامپت</th>
+                        <th class="px-4 py-3 border border-gray-300 w-[70px]">👥 تیم</th> 
+                        <th class="px-4 py-3 border border-gray-300 w-[10%]">🏷️ موضوع</th>
+                        <th class="px-4 py-3 border border-gray-300 w-[10%]">🔑 کلمات</th>
+                        <th class="px-4 py-3 border border-gray-300 w-[10%]">⛔ منفی</th>
+                        <th class="px-4 py-3 border border-gray-300 w-[50px]">🖼️ لینک</th>
+                        <th class="px-4 py-3 border border-gray-300 w-[10%]">✍️ نوت</th>
+                        <th class="px-4 py-3 border border-gray-300 w-[100px]">اقدامات</th>
+                    </tr>
                 </thead>
                 <tbody id="promptTableBody">
                     <tr id="loadingRow">
@@ -211,7 +210,6 @@
             }
 
             const headers = ["متن", "تیم", "موضوع", "کلمات", "منفی", "لینک", "نوت"];
-            
             const escapeCSV = (str) => {
                 if (!str) return '""';
                 let result = str.replace(/"/g, '""');
@@ -222,7 +220,6 @@
             };
 
             let csvContent = headers.join(',') + '\n';
-            
             allPrompts.forEach(prompt => {
                 const data = prompt.data;
                 const row = [
@@ -277,7 +274,6 @@
             if (data.team === "مارکتینگ") teamBadgeColor = "bg-green-100 text-green-800";
             if (data.team === "پرده آبی") teamBadgeColor = "bg-blue-100 text-blue-800";
 
-            // استفاده از px-4 برای کاهش فاصله و break-words برای جلوگیری از بیرون‌زدگی متن
             row.innerHTML = `
                 <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 relative text-xs sm:text-sm">
                     <span class="prompt-text">${escapeHTML(data.text)}</span>
