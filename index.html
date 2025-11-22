@@ -3,149 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کتابخانه پرامپت</title>
+    <title>کتابخانه پرامپت بادصبا</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Tahoma, sans-serif; }
-        .hidden { display: none; }
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem; 
-            line-height: 1;
-            padding: 0.25rem;
-            margin: 0 0.25rem;
+        body { 
+            font-family: 'Vazirmatn', sans-serif; 
+            background-color: #f3f4f6;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
         }
-        .delete-btn { color: #ef4444; }
-        .delete-btn:hover { color: #b91c1c; }
-        .edit-btn { color: #3b82f6; }
-        .edit-btn:hover { color: #1d4ed8; }
+        .hidden { display: none; }
+        
+        /* استایل سفارشی اسکرول‌بار */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #c7c7c7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
+
+        .action-btn {
+            transition: all 0.2s;
+            border-radius: 0.5rem;
+            padding: 0.4rem;
+        }
+        .delete-btn:hover { background-color: #fee2e2; color: #b91c1c; transform: scale(1.1); }
+        .edit-btn:hover { background-color: #dbeafe; color: #1d4ed8; transform: scale(1.1); }
         
         .copy-btn {
             position: absolute;
-            top: 0.25rem;
-            left: 0.25rem;
-            padding: 0.1rem 0.3rem;
-            background-color: white;
+            top: 0.5rem;
+            left: 0.5rem;
+            padding: 0.2rem 0.5rem;
+            background-color: rgba(255, 255, 255, 0.9);
             border: 1px solid #e2e8f0;
-            border-radius: 0.25rem;
-            color: #6b7280;
+            border-radius: 0.5rem;
+            color: #64748b;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 0.2s;
+            transform: translateY(5px);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            z-index: 10;
         }
-        tr:hover .copy-btn { opacity: 1; }
-        .copy-btn:hover { color: #3b82f6; background-color: #f9fafb; }
+        tr:hover .copy-btn { opacity: 1; transform: translateY(0); }
+        .copy-btn:hover { color: #4f46e5; border-color: #4f46e5; background-color: #fff; }
+
+        /* انیمیشن مودال */
+        .modal-animate { animation: modalFadeIn 0.3s ease-out forwards; }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="text-gray-800 antialiased">
 
-    <header class="bg-white shadow-md">
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-gray-200 shadow-sm">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-6">
-                <h1 class="text-3xl font-bold text-gray-800">🚀 کتابخانه پرامپت بادصبا</h1>
-                <div class="flex space-x-2 space-x-reverse">
-                    <button id="exportCsvButton" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition duration-300 text-sm">
-                        خروجی CSV
+            <div class="flex flex-col sm:flex-row justify-between items-center py-4 gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-xl shadow-lg shadow-indigo-200">
+                        🚀
+                    </div>
+                    <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600">
+                        کتابخانه پرامپت بادصبا
+                    </h1>
+                </div>
+                <div class="flex space-x-3 space-x-reverse">
+                    <button id="exportCsvButton" class="group flex items-center gap-2 bg-white border border-green-600 text-green-600 px-5 py-2.5 rounded-xl font-medium hover:bg-green-50 transition-all duration-300 text-sm shadow-sm hover:shadow-md">
+                        <span>خروجی CSV</span>
+                        <span class="text-lg group-hover:-translate-y-0.5 transition-transform">📊</span>
                     </button>
-                    <button id="addPromptButton" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300 text-sm">
-                        + پرامپت جدید
+                    <button id="addPromptButton" class="group flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2.5 rounded-xl font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all duration-300 text-sm transform active:scale-95">
+                        <span>پرامپت جدید</span>
+                        <span class="text-lg font-light group-hover:rotate-90 transition-transform">+</span>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto p-4">
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
         
-        <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
-            <input type="text" id="searchInput" placeholder=" جستجو در پرامپت‌ها..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="relative max-w-2xl mx-auto mb-8 group">
+            <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                <svg class="w-5 h-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input type="text" id="searchInput" placeholder="جستجو در پرامپت‌ها، کلمات کلیدی یا تیم‌ها..." 
+                class="w-full pr-12 pl-4 py-3.5 bg-white border-0 ring-1 ring-gray-200 rounded-2xl shadow-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:shadow-lg transition-all duration-300">
         </div>
 
-        <div class="overflow-x-auto bg-white rounded-lg shadow">
-            <table class="w-full text-sm text-right text-gray-700 border-collapse border border-gray-300 table-fixed">
-                <thead class="bg-gray-800 text-white">
-                    <tr>
-                        <th class="px-4 py-3 border border-gray-300 w-[40%]">💡 متن پرامپت</th>
-                        <th class="px-4 py-3 border border-gray-300 w-[70px]">👥 تیم</th> 
-                        <th class="px-4 py-3 border border-gray-300 w-[10%]">🏷️ موضوع</th>
-                        <th class="px-4 py-3 border border-gray-300 w-[10%]">🔑 کلمات</th>
-                        <th class="px-4 py-3 border border-gray-300 w-[10%]">⛔ منفی</th>
-                        <th class="px-4 py-3 border border-gray-300 w-[50px]">🖼️ لینک</th>
-                        <th class="px-4 py-3 border border-gray-300 w-[10%]">✍️ نوت</th>
-                        <th class="px-4 py-3 border border-gray-300 w-[100px]">اقدامات</th>
-                    </tr>
-                </thead>
-                <tbody id="promptTableBody">
-                    <tr id="loadingRow">
-                        <td colspan="8" class="px-6 py-10 text-center text-gray-500 text-lg border border-gray-300">
-                             در حال بارگذاری...
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-right text-gray-600 border-collapse table-fixed min-w-[1000px]">
+                    <thead>
+                        <tr class="bg-gray-50/50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500">
+                            <th class="px-6 py-4 font-bold w-[35%]">💡 متن پرامپت</th>
+                            <th class="px-4 py-4 font-bold w-[80px] text-center">👥 تیم</th> 
+                            <th class="px-4 py-4 font-bold w-[12%]">🏷️ موضوع</th>
+                            <th class="px-4 py-4 font-bold w-[12%]">🔑 کلمات</th>
+                            <th class="px-4 py-4 font-bold w-[12%]">⛔ منفی</th>
+                            <th class="px-4 py-4 font-bold w-[60px] text-center">🖼️</th>
+                            <th class="px-4 py-4 font-bold w-[10%]">✍️ نوت</th>
+                            <th class="px-4 py-4 font-bold w-[100px] text-center">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="promptTableBody" class="divide-y divide-gray-100">
+                        <tr id="loadingRow">
+                            <td colspan="8" class="px-6 py-16 text-center text-gray-400">
+                                <div class="flex flex-col items-center justify-center gap-3 animate-pulse">
+                                    <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-32"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
-    <div id="addModal" class="hidden fixed inset-0 bg-black bg-opacity-60 overflow-y-auto h-full w-full flex items-center justify-center z-50 p-4">
-        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-3xl max-h-full overflow-y-auto">
-            <div class="flex justify-between items-center border-b pb-3 mb-5">
-                <h2 id="modalTitle" class="text-2xl font-semibold">افزودن پرامپت جدید</h2>
-                <button id="closeModalButton" class="text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
-            </div>
-            
-            <form id="addPromptForm" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="promptText" class="block text-sm font-medium text-gray-700 mb-1">💡 متن پرامپت <span class="text-red-500">*</span></label>
-                        <textarea id="promptText" name="promptText" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
-                    </div>
-                    <div>
-                        <label for="promptNotes" class="block text-sm font-medium text-gray-700 mb-1">✍️ یادداشت‌ها</label>
-                        <textarea id="promptNotes" name="promptNotes" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
+    <div id="addModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white text-right shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-3xl modal-animate border border-gray-100">
+                
+                <div class="bg-gradient-to-l from-indigo-50 to-white px-6 py-5 border-b border-gray-100 flex justify-between items-center">
+                    <h2 id="modalTitle" class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <span class="text-2xl">✨</span> افزودن پرامپت جدید
+                    </h2>
+                    <button id="closeModalButton" class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2 transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label for="promptTeam" class="block text-sm font-medium text-gray-700 mb-1">👥 تیم <span class="text-red-500">*</span></label>
-                        <select id="promptTeam" name="promptTeam" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                            <option value="طراحی">طراحی</option>
-                            <option value="مارکتینگ">مارکتینگ</option>
-                            <option value="پرده آبی">پرده آبی</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="promptOccasion" class="block text-sm font-medium text-gray-700 mb-1">🏷️ موضوع</label>
-                        <input type="text" id="promptOccasion" name="promptOccasion" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="promptKeywords" class="block text-sm font-medium text-gray-700 mb-1">🔑 کلمات کلیدی</label>
-                        <input type="text" id="promptKeywords" name="promptKeywords" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="promptNegative" class="block text-sm font-medium text-gray-700 mb-1">⛔ پرامپت منفی</label>
-                        <input type="text" id="promptNegative" name="promptNegative" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
+                <div class="px-6 py-6 sm:p-8">
+                    <form id="addPromptForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-1">
+                                <label for="promptText" class="block text-sm font-semibold text-gray-700 mb-2">💡 متن پرامپت <span class="text-red-500">*</span></label>
+                                <textarea id="promptText" name="promptText" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow resize-none bg-gray-50 focus:bg-white" placeholder="پرامپت خود را اینجا بنویسید..." required></textarea>
+                            </div>
+                            <div class="col-span-1">
+                                <label for="promptNotes" class="block text-sm font-semibold text-gray-700 mb-2">✍️ یادداشت‌ها</label>
+                                <textarea id="promptNotes" name="promptNotes" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow resize-none bg-gray-50 focus:bg-white" placeholder="توضیحات تکمیلی..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                            <div>
+                                <label for="promptTeam" class="block text-sm font-semibold text-gray-700 mb-2">👥 تیم <span class="text-red-500">*</span></label>
+                                <div class="relative">
+                                    <select id="promptTeam" name="promptTeam" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50 focus:bg-white appearance-none cursor-pointer">
+                                        <option value="طراحی">🎨 طراحی</option>
+                                        <option value="مارکتینگ">📈 مارکتینگ</option>
+                                        <option value="پرده آبی">💻 پرده آبی</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-2 text-gray-500">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="promptOccasion" class="block text-sm font-semibold text-gray-700 mb-2">🏷️ موضوع</label>
+                                <input type="text" id="promptOccasion" name="promptOccasion" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50 focus:bg-white">
+                            </div>
+                            <div>
+                                <label for="promptKeywords" class="block text-sm font-semibold text-gray-700 mb-2">🔑 کلمات کلیدی</label>
+                                <input type="text" id="promptKeywords" name="promptKeywords" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50 focus:bg-white">
+                            </div>
+                            <div>
+                                <label for="promptNegative" class="block text-sm font-semibold text-gray-700 mb-2">⛔ پرامپت منفی</label>
+                                <input type="text" id="promptNegative" name="promptNegative" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50 focus:bg-white">
+                            </div>
+                        </div>
 
-                <div class="grid grid-cols-1 gap-4">
-                    <div>
-                        <label for="promptLink" class="block text-sm font-medium text-gray-700 mb-1">🖼️ لینک نمونه بصری</label>
-                        <input type="url" id="promptLink" name="promptLink" placeholder="https://example.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ltr text-left">
-                    </div>
+                        <div>
+                            <label for="promptLink" class="block text-sm font-semibold text-gray-700 mb-2">🖼️ لینک نمونه بصری</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <span class="text-gray-500 sm:text-sm">🔗</span>
+                                </div>
+                                <input type="url" id="promptLink" name="promptLink" placeholder="https://example.com" class="w-full pr-10 pl-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50 focus:bg-white ltr text-left font-mono text-sm">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-6 space-x-3 space-x-reverse border-t border-gray-100 mt-4">
+                            <button type="button" id="cancelButton" class="px-6 py-2.5 rounded-xl font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-300">
+                                انصراف
+                            </button>
+                            <button type="submit" id="saveButton" class="px-6 py-2.5 rounded-xl font-medium text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200 hover:shadow-xl transition duration-300 flex items-center gap-2">
+                                <span>ذخیره</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="flex justify-end pt-4 space-x-2 space-x-reverse">
-                    <button type="button" id="cancelButton" class="bg-gray-200 text-gray-800 px-5 py-2 rounded-lg font-medium hover:bg-gray-300 transition duration-300">
-                        انصراف
-                    </button>
-                    <button type="submit" id="saveButton" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-300">
-                        ذخیره
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
     
@@ -159,7 +222,7 @@
             deleteDoc, 
             updateDoc, 
             collection, 
-            onSnapshot
+            onSnapshot 
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
           const firebaseConfig = {
@@ -196,8 +259,14 @@
         async function copyToClipboard(text, btn) {
             try {
                 await navigator.clipboard.writeText(text);
-                btn.textContent = 'OK!';
-                setTimeout(() => { btn.textContent = '📋'; }, 1500);
+                btn.textContent = 'کپی شد!';
+                btn.style.color = '#16a34a';
+                btn.style.borderColor = '#16a34a';
+                setTimeout(() => { 
+                    btn.textContent = 'کپی'; 
+                    btn.style.color = ''; 
+                    btn.style.borderColor = '';
+                }, 1500);
             } catch (err) {
                 console.error('Failed', err);
             }
@@ -244,13 +313,21 @@
         }
         exportCsvButton.addEventListener('click', exportToCSV);
 
-        const showModal = () => modal.classList.remove('hidden');
+        const showModal = () => {
+            modal.classList.remove('hidden');
+            // Slight delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                modal.querySelector('div[aria-hidden="true"]').classList.remove('opacity-0');
+                modal.querySelector('div[aria-hidden="true"]').classList.add('opacity-100');
+            }, 10);
+        };
+
         const hideModal = () => {
             modal.classList.add('hidden');
             addPromptForm.reset();
             currentEditId = null;
-            modalTitle.textContent = "افزودن پرامپت جدید";
-            saveButton.textContent = "ذخیره";
+            modalTitle.innerHTML = `<span class="text-2xl">✨</span> افزودن پرامپت جدید`;
+            saveButton.innerHTML = `<span>ذخیره</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
         };
 
         addPromptButton.addEventListener('click', () => {
@@ -261,43 +338,63 @@
         });
         closeModalButton.addEventListener('click', hideModal);
         cancelButton.addEventListener('click', hideModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
+        modal.addEventListener('click', (e) => { 
+            // Close only if clicking the backdrop (first child of modal container)
+            if (e.target.hasAttribute('aria-hidden')) hideModal(); 
+        });
 
         function renderPromptRow(docSnapshot) {
             const data = docSnapshot.data();
             const row = tableBody.insertRow(-1);
             row.id = docSnapshot.id;
-            row.className = 'hover:bg-gray-50 transition duration-150';
+            row.className = 'group hover:bg-indigo-50/40 transition-colors duration-200';
 
-            let teamBadgeColor = "bg-gray-100 text-gray-800";
-            if (data.team === "طراحی") teamBadgeColor = "bg-pink-100 text-pink-800";
-            if (data.team === "مارکتینگ") teamBadgeColor = "bg-green-100 text-green-800";
-            if (data.team === "پرده آبی") teamBadgeColor = "bg-blue-100 text-blue-800";
+            // Badge Logic
+            let badgeClass = "bg-gray-100 text-gray-700 border-gray-200";
+            let badgeIcon = "👥";
+            if (data.team === "طراحی") { badgeClass = "bg-pink-100 text-pink-700 border-pink-200"; badgeIcon = "🎨"; }
+            if (data.team === "مارکتینگ") { badgeClass = "bg-emerald-100 text-emerald-700 border-emerald-200"; badgeIcon = "📈"; }
+            if (data.team === "پرده آبی") { badgeClass = "bg-blue-100 text-blue-700 border-blue-200"; badgeIcon = "💻"; }
 
             row.innerHTML = `
-                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 relative text-xs sm:text-sm">
-                    <span class="prompt-text">${escapeHTML(data.text)}</span>
-                    <button class="copy-btn" title="کپی">📋</button>
+                <td class="px-6 py-4 whitespace-normal break-words relative align-top">
+                    <div class="prompt-text text-gray-800 leading-relaxed font-medium mb-2">${escapeHTML(data.text)}</div>
+                    <button class="copy-btn flex items-center gap-1" title="کپی متن">
+                        <span>کپی</span>
+                    </button>
                 </td>
-                <td class="px-4 py-3 whitespace-nowrap border border-gray-300 text-center">
-                    <span class="${teamBadgeColor} px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold block w-min mx-auto">
-                        ${escapeHTML(data.team)}
+                <td class="px-4 py-4 whitespace-nowrap align-top text-center">
+                    <span class="${badgeClass} border px-2.5 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1 shadow-sm">
+                         ${escapeHTML(data.team)}
                     </span>
                 </td>
-                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 text-xs">${escapeHTML(data.occasion)}</td>
-                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 text-xs">${escapeHTML(data.keywords)}</td>
-                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 text-xs">${escapeHTML(data.negative)}</td>
-                <td class="px-4 py-3 border border-gray-300 text-center">${data.link ? `<a href="${escapeHTML(data.link)}" class="text-blue-600 hover:underline text-xs" target="_blank">🔗 لینک</a>` : ''}</td>
-                <td class="px-4 py-3 whitespace-normal break-words border border-gray-300 text-xs">${escapeHTML(data.notes)}</td>
-                <td class="px-4 py-3 text-center whitespace-nowrap border border-gray-300">
-                    <button class="action-btn edit-btn" data-id="${docSnapshot.id}" title="ویرایش">✏️</button>
-                    <button class="action-btn delete-btn" data-id="${docSnapshot.id}" title="حذف">🗑️</button>
+                <td class="px-4 py-4 whitespace-normal break-words text-gray-600 text-xs align-top">${escapeHTML(data.occasion)}</td>
+                <td class="px-4 py-4 whitespace-normal break-words align-top">
+                    ${data.keywords ? `<span class="inline-block bg-gray-100 text-gray-600 text-[10px] px-2 py-1 rounded border border-gray-200">${escapeHTML(data.keywords)}</span>` : ''}
+                </td>
+                <td class="px-4 py-4 whitespace-normal break-words text-red-500 text-xs align-top">${escapeHTML(data.negative)}</td>
+                <td class="px-4 py-4 text-center align-top">
+                    ${data.link ? `
+                    <a href="${escapeHTML(data.link)}" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300" target="_blank" title="مشاهده لینک">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>` : '<span class="text-gray-300 text-xl">-</span>'}
+                </td>
+                <td class="px-4 py-4 whitespace-normal break-words text-gray-500 text-xs italic align-top">${escapeHTML(data.notes)}</td>
+                <td class="px-4 py-4 text-center whitespace-nowrap align-top">
+                    <div class="flex justify-center items-center gap-2 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <button class="action-btn edit-btn text-blue-500" data-id="${docSnapshot.id}" title="ویرایش">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </button>
+                        <button class="action-btn delete-btn text-red-500" data-id="${docSnapshot.id}" title="حذف">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
                 </td>
             `;
 
             row.querySelector('.delete-btn').addEventListener('click', async (e) => {
                 const id = e.currentTarget.dataset.id;
-                if (confirm('حذف شود؟')) {
+                if (confirm('آیا از حذف این پرامپت اطمینان دارید؟')) {
                     try { await deleteDoc(doc(db, promptsCollectionPath, id)); } catch (error) { console.error(error); }
                 }
             });
@@ -307,8 +404,8 @@
                 const promptToEdit = allPrompts.find(p => p.id === id);
                 if (promptToEdit) {
                     currentEditId = id;
-                    modalTitle.textContent = "ویرایش پرامپت";
-                    saveButton.textContent = "ذخیره تغییرات";
+                    modalTitle.innerHTML = `<span class="text-2xl">✏️</span> ویرایش پرامپت`;
+                    saveButton.innerHTML = `<span>بروزرسانی</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>`;
                     document.getElementById('promptText').value = promptToEdit.data.text || '';
                     document.getElementById('promptOccasion').value = promptToEdit.data.occasion || '';
                     document.getElementById('promptKeywords').value = promptToEdit.data.keywords || '';
@@ -375,7 +472,16 @@
                 onSnapshot(promptsCollection, (querySnapshot) => {
                     tableBody.innerHTML = ''; 
                     if (querySnapshot.empty) {
-                        tableBody.innerHTML = `<tr id="emptyRow"><td colspan="8" class="px-6 py-10 text-center text-gray-500">داده‌ای نیست.</td></tr>`;
+                        tableBody.innerHTML = `
+                            <tr id="emptyRow">
+                                <td colspan="8" class="px-6 py-16 text-center">
+                                    <div class="flex flex-col items-center justify-center text-gray-400">
+                                        <span class="text-5xl mb-4 opacity-50">📭</span>
+                                        <p class="text-lg font-medium">هنوز پرامپتی ثبت نشده است</p>
+                                        <p class="text-sm mt-1">اولین پرامپت تیم را شما ثبت کنید!</p>
+                                    </div>
+                                </td>
+                            </tr>`;
                         allPrompts = [];
                         return;
                     }
